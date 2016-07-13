@@ -79,9 +79,9 @@ wssplot <- function(data, nc=15, seed=1234){
 	   }
 ```
 
-I decided to take the function apart to really see what was going on. To distinguish between my code and the exercise code, I switched `wss` to `ssw` - [here are the details](wssplot.md)
+I decided to take the function apart to really see what was going on. To distinguish between my code and the exercise code, I switched `wss` to `ssw` - [here are the details](wssplot.md).
 
-
+Essentially it appears that with a set of number of clusters of 15 - 
 
 
 ### Method 02
@@ -102,6 +102,8 @@ barplot(table(nc$Best.n[1,]),
 This method literally suggests 3 clusters, as shown in the output and barplot:
 
 ![NbClust barplot](plots/NbClust-01.png)
+
+![clusplot](plots/clusplot-winescale-01.png)
 
 
 
