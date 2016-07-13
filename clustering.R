@@ -30,7 +30,8 @@ winescale <- as.data.frame(round(scale(wine), digits = 4))
 # How do we decide how many clusters to use if you don't know that already?
 # We'll try two methods.
 
-# Method 1: A plot of the total within-groups sums of squares against the 
+# Method 1: 
+# A plot of the total within-groups sums of squares against the 
 # number of clusters in a K-means solution can be helpful. A bend in the 
 # graph can suggest the appropriate number of clusters. 
 
@@ -41,11 +42,35 @@ wssplot <- function(data, nc=15, seed=1234){
     wss[i] <- sum(kmeans(data, centers=i)$withinss)}
   
   plot(1:nc, wss, type="b", xlab="Number of Clusters",
-       ylab="Within groups sum of squares")
+       ylab="Within groups sum of squares",
+       main = "Total WSS vs. Number of Clusters")
 }
 
 par(mar = c(8, 8, 8, 8), family = "HersheySans")
 wssplot(winescale)
+
+# I'd like to try this with a different number of clusters to see what happens.
+
+wssplot02 <- function(data, nc = 64, seed = 64) {
+  wss <- (nrow(data) - 1) * sum(apply(data, 2, var))
+  for (i in 2:nc) {
+    set.seed(seed)
+    wss[i] <- sum(kmeans(data, centers = i)$withinss)}
+  
+  plot(1:nc, wss, type = "b", xlab = "Number of Clusters",
+       ylab = "within-groups sum of squares",
+       main = "Total WSS vs. Number of Clusters")
+}
+
+par(mar = c(8, 8, 8, 8), family = "HersheySans")
+wssplot02(winescale)
+
+# The steep decline; the leveling-off; the flattening.
+
+
+
+
+
 
 # Exercise 2:
 #   * How many clusters does this method suggest?
