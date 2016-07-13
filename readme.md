@@ -1,8 +1,12 @@
-# K-means Clustering - exercise
+# K-means - clustering exercise
 
 _student work in R_
 
 This exercise is adapted from the book [R in Action](http://www.r-bloggers.com/k-means-clustering-from-r-in-action/) and takes a look at a `wine` dataset.
+
+- [Load and Scale the data](#load-and-scale)
+- [Selecting a Number of Clusters: Method 01](#method-01)
+- [Selecting a Number of Clusters: Method 02](#method-02)
 
 ## Load and Scale
 
@@ -35,7 +39,7 @@ winescale <- as.data.frame(round(scale(wine), digits = 4))
 
 ## Selecting a Number of Clusters
 
-###### Method 01
+### Method 01
 
 _Looking for an elbow:_ 
 
@@ -43,11 +47,11 @@ _Looking for an elbow:_
 
 ![wssplot](plots/SSW.png)
 
-_Questions:_
-
 **How many clusters does this method suggest?**
 
-My initial thought is that it would suggest 3-5 clusters - but much closer to 3. It feels like 5 if I strain. I'm looking at the 'joints' or 'elbows' of the plot - distinct changes in value, forming into a feature until the next 'bend' in the graph. My thinking is that clusters would form where there's an interval of points that exhibits something resembling a linear relationship - until it reaches the next 'elbow'. 
+My initial thought is that it would suggest 3-5 clusters - but much closer to 3. It feels like 5 if I strain to see them. I'm looking at the 'joints' or 'elbows' of the plot - distinct changes in value, forming into a feature until the next 'bend' in the graph. My thinking is that clusters would form where there's an interval of points that exhibits something resembling a linear relationship - until it reaches the next 'elbow'. 
+
+Essentially: observing a 'steep decline' in WSS (nc 1-3); a 'leveling-off'(nc 4-12, approximately); and a 'flattening out' (nc 12-15, approximately).
 
 **Why does this method work? What is the intuition behind it?**
 
@@ -86,12 +90,7 @@ It looks like `wssplot()` takes data as input, has a number of clusters set to 1
 
 
 
-
-
-
-
-
-###### Method 02
+### Method 02
 
 This method uses the function `NbClust()` to analyze criteria, and returns a distribution of the potential number of clusters. 
 
@@ -108,7 +107,7 @@ barplot(table(nc$Best.n[1,]),
 
 This method literally suggests 3 clusters, as shown in the output and barplot:
 
-![NbClust barplot](NbClust-01.png)
+![NbClust barplot](plots/NbClust-01.png)
 
 
 
