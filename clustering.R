@@ -24,8 +24,8 @@ str(wine)
 # it using the scale() function
 
 winescale <- wine
-winescale$Type <- NULL
 winescale <- as.data.frame(round(scale(wine), digits = 4))
+winescale$Type <- NULL
 
 # Now we'd like to cluster the data using K-Means. 
 # How do we decide how many clusters to use if you don't know that already?
@@ -140,14 +140,84 @@ clustDF <- as.data.frame(clustTab)
 par(mfrow = c(1, 1), mar = c(8, 8, 8, 8), family = "HersheySans")
 clusplot(winescale, clus = fit.km$cluster)
 
+# add clusters to winescale df
+wineclust <- winescale
+wineclust$cluster <- as.factor(fit.km$cluster)
+
+# create new df with centers of clusters for each variable
+centers <- as.data.frame(fit.km$centers)
 
 
-# PAM
+# check and see how the variables are correlated
+library(corrplot)
+winecor <- cor(winescale)
+par(mfrow = c(2, 2), mar = c(8, 8, 8, 8), family = "Arial Rounded MT Bold")
+corrplot(winecor, method = "circle", tl.srt = 45)
 
-clusPAM <- pam(winescale, k = 3)
-clusPAMtab <- table(clusPAM$clustering, wine$Type)
-clusPAMtab
-#      1  2  3
-#   1 59 12  0
-#   2  0 58  0
-#   3  0  1 48
+
+
+# Do more strongly-correlated variables fall more cleanly into clusters?
+library(ggplot2)
+
+wcplot <- ggplot(wineclust, aes(x = Alcohol, y = Malic, color = cluster)) +
+  geom_point() +
+  geom_point(data = centers, aes(x = Alcohol, y = Malic, color = 'Center')) +
+  geom_point(data = centers, aes(x = Alcohol, y = Malic, color = 'Center'),
+             size = 24, alpha = 0.25) +
+  theme_minimal(base_size = 12, base_family = "HersheySans")
+
+wcplot
+
+wcplot02 <- ggplot(wineclust, aes(x = Alcohol, y = Proline, color = cluster)) +
+  geom_point() +
+  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center')) +
+  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center'),
+             size = 24, alpha = 0.25) +
+  theme_minimal(base_size = 12, base_family = "HersheySans") +
+  geom_segment(data = vtess$delsgs, aes(x = x1, y = y1, xend = x2, yend = y2),
+               color = "red4", alpha = 0.50)
+
+wcplot02
+
+# Voronoi Cells -------------------------------------------
+
+library(deldir)
+vtess <- deldir(winescale$Alcohol, winescale$Proline)
+vtess_tile <- tile.list(vtess)
+
+library(RColorBrewer)
+winepal <- brewer.pal(3, "Reds")
+
+par(mfrow = c(1, 1), mar = c(6, 6, 6, 6), family = "HersheySans")
+plot.tile.list(vtess_tile, type = "triang", asp = 1, axes = F, 
+               fillcol = winepal)
+
+# ggplot w/ delaunay triangulation
+wcplot03 <- ggplot(wineclust, aes(x = Alcohol, y = Proline, color = cluster)) +
+  geom_point(size = 2.75) +
+  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center')) +
+  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center'),
+             size = 24, alpha = 0.25) +
+  theme_minimal(base_size = 12, base_family = "HersheySans") +
+  geom_segment(data = vtess$delsgs, aes(x = x1, y = y1, xend = x2, yend = y2),
+               color = "red4", alpha = 0.35) +
+  labs(title = "Delaunay Triangulation over Alcohol and Proline points")
+
+wcplot03
+
+wcplot04 <- ggplot(wineclust, aes(x = Alcohol, y = Proline, color = cluster)) +
+  geom_point(size = 2.75) +
+  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center')) +
+  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center'),
+             size = 24, alpha = 0.25) +
+  theme_minimal(base_size = 12, base_family = "HersheySans") +
+  geom_segment(data = vtess$dirsgs, aes(x = x1, y = y1, xend = x2, yend = y2),
+               color = "red4", alpha = 0.35) +
+  labs(title = "Voronoi tessellation over Alcohol and Proline points")
+
+wcplot04
+
+
+
+
+
