@@ -10,9 +10,7 @@ This exercise is adapted from the book [R in Action](http://www.r-bloggers.com/k
 
 ## Load and Scale
 
-
 ``` r
-install.packages(c("cluster", "rattle", "NbClust"))
 library(cluster)
 library(rattle)
 library(NbClust)
@@ -25,7 +23,7 @@ We've got 178 rows of observations across 14 variables. A glimpse at the first 2
 
 ![wine data](plots/winedata.png)
 
-First off we'll remove the first column of and then normalizing the data using `scale()`. This method takes the mean and standard deviation of each value and then normalizes each value by 
+First off we'll remove the first column of and then normalizing the data using `scale()`. This method takes the mean and standard deviation of each value, and then normalizes each value by 
 
 1. substrating the mean of all values from each value.
 2. dividing each value by the standard deviation of all values. 
@@ -45,7 +43,7 @@ _Looking for an elbow:_
 
 "A plot of the total within-groups sums of squares against the number of clusters in a K-means solution can be helpful. A bend in the graph can suggest the appropriate amount of clusters."
 
-![wssplot](plots/SSW.png)
+![wssplot](plots/SSW-nc15.png)
 
 **How many clusters does this method suggest?**
 
@@ -70,22 +68,48 @@ The larger the value for the WSS, the larger the distance would be between each 
 
 ``` r
 wssplot <- function(data, nc=15, seed=1234){
-	              wss <- (nrow(data)-1)*sum(apply(data,2,var))
-               	      for (i in 2:nc){
-		        set.seed(seed)
+	            wss <- (nrow(data)-1)*sum(apply(data,2,var))
+				for (i in 2:nc){
+		        	set.seed(seed)
 	                wss[i] <- sum(kmeans(data, centers=i)$withinss)}
-	                
-		      plot(1:nc, wss, type="b", xlab="Number of Clusters",
-	                        ylab="Within groups sum of squares")
-	   }
 
-par(mar = c(8, 8, 8, 8), family = "HersheySans")
-wssplot(winescale)
+	                plot(1:nc, wss, type="b", xlab="Number of Clusters",
+	                     ylab="Within groups sum of squares",
+	                     main = "Total WSS vs. Number of Clusters (15)")
+	   }
 ```
 
-It looks like `wssplot()` takes data as input, has a number of clusters set to 15, and sets the random seed at 1234. It then creates a variable to store the _sum of squares within_, and performs the calculation
+I decided to take the function apart to really see what was going on. To distinguish between my code and the exercise code, I switched `wss` to `ssw`
 
-		(number of rows minus 1) times (the sum of variance of each element by column)
+
+Here we have the grand sum
+``` r
+ssw <- (nrow(winescale)-1)*sum(apply(winescale, 2, var)) # 2477.996
+```
+
+If we set a number of clusters to 15 for a potential K-means solution, this for loop returns the sum of squares within for each 'number of clusters' from two clusters to 15. It skips the first (nc=1) as we initialized that in the last line of code.
+
+``` r
+for (i in 2:15) {
+  set.seed(123)
+  ssw[i] <- sum(kmeans(winescale, centers = i)$withinss)
+}
+```
+
+After running through this loop, we have values for the sum of squares of `n` number of clusters from 1 to 15. 
+
+``` r
+ssw[2] # 1718.964
+```
+
+And to see them all:
+
+```
+sswDF <- as.data.frame(ssw = ssw, nc = 1:15)
+
+Just to check:
+
+![wss plot function](plots/wssplot-deconstruct-02.png)
 
 
 
