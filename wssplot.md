@@ -1,6 +1,6 @@
 # wssplot() deconstruction
 
-[wssplot.R](wssplot.R)
+The full script is here: [wssplot.R](wssplot.R)
 
 **Look at the code for wssplot() and figure out how it works.**
 
