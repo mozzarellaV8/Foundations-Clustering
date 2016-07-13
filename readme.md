@@ -2,7 +2,7 @@
 
 _student work in R_
 
-This exercise is adapted from the book [R in Action](http://www.r-bloggers.com/k-means-clustering-from-r-in-action/) and takes a look at a `wine` dataset.
+This exercise is adapted from the book [R in Action](http://www.r-bloggers.com/k-means-clustering-from-r-in-action/) and takes a look at a `wine` dataset to practice two methods for doing k-means clustering.
 
 - [Load and Scale the data](#load-and-scale)
 - [Selecting a Number of Clusters: Method 01](#method-01)
