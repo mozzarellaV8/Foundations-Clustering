@@ -106,6 +106,9 @@ barplot(table(nc$Best.n[1,]),
 
 **How many clusters does this method suggest?**
 
+This method literally suggests 3 clusters, as shown in the output and barplot:
+
+![NbClust barplot](NbClust-01.png)
 
 
 
