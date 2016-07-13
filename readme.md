@@ -16,6 +16,9 @@ library(NbClust)
 data(wine, package = "rattle")
 head(wine)
 ```
+
+We've got 178 rows of observations across 14 variables. A glimpse at the first 24:
+
 ![wine data](plots/winedata.png)
 
 First off we'll remove the first column of and then normalizing the data using `scale()`. This method takes the mean and standard deviation of each value and then normalizes each values by substrating the mean and dividing by the standard deviation - I believe essentially creating a z-statistic. 
