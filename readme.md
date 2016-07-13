@@ -21,7 +21,12 @@ We've got 178 rows of observations across 14 variables. A glimpse at the first 2
 
 ![wine data](plots/winedata.png)
 
-First off we'll remove the first column of and then normalizing the data using `scale()`. This method takes the mean and standard deviation of each value and then normalizes each values by substrating the mean and dividing by the standard deviation - I believe essentially creating a z-statistic. 
+First off we'll remove the first column of and then normalizing the data using `scale()`. This method takes the mean and standard deviation of each value and then normalizes each value by 
+
+1. substrating the mean of all values from each value.
+2. dividing each value by the standard deviation of all values. 
+
+I believe this essentially creates [z-score](http://www.r-bloggers.com/r-tutorial-series-centering-variables-and-generating-z-scores-with-the-scale-function/). 
 
 ``` r
 wine$Type <- NULL
