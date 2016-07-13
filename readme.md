@@ -31,7 +31,7 @@ winescale <- as.data.frame(round(scale(wine), digits = 4))
 
 Looking for an elbow: "A plot of the total within-groups sums of squares against the number of clusters in a K-means solution can be helpful. A bend in the graph can suggest the appropriate amount of clusters."
 
-![wssplot](plots/wssplot.png)
+![wssplot](plots/SSW.png)
 
 _Questions:_
 
