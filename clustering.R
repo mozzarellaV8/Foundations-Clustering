@@ -23,7 +23,8 @@ str(wine)
 # Exercise 1: Remove the first column from the data and scale
 # it using the scale() function
 
-wine$Type <- NULL
+winescale <- wine
+winescale$Type <- NULL
 winescale <- as.data.frame(round(scale(wine), digits = 4))
 
 # Now we'd like to cluster the data using K-Means. 
@@ -43,7 +44,7 @@ wssplot <- function(data, nc=15, seed=1234){
   
   plot(1:nc, wss, type="b", xlab="Number of Clusters",
        ylab="Within groups sum of squares",
-       main = "Total WSS vs. Number of Clusters")
+       main = "Total WSS vs. Number of Clusters (15)")
 }
 
 par(mar = c(8, 8, 8, 8), family = "HersheySans")
@@ -59,7 +60,7 @@ wssplot02 <- function(data, nc = 64, seed = 64) {
   
   plot(1:nc, wss, type = "b", xlab = "Number of Clusters",
        ylab = "within-groups sum of squares",
-       main = "Total WSS vs. Number of Clusters")
+       main = "Total WSS vs. Number of Clusters (64)")
 }
 
 par(mar = c(8, 8, 8, 8), family = "HersheySans")
@@ -67,9 +68,19 @@ wssplot02(winescale)
 
 # The steep decline; the leveling-off; the flattening.
 
+wssplot03 <- function(data, nc = 6, seed = 144) {
+  wss <- (nrow(data) - 1) * sum(apply(data, 2, var))
+  for (i in 2:nc) {
+    set.seed(seed)
+    wss[i] <- sum(kmeans(data, centers = i)$withinss)}
+  
+  plot(1:nc, wss, type = "b", xlab = "Number of Clusters",
+       ylab = "within-groups sum of squares",
+       main = "Total WSS vs. Number of Clusters (6)")
+}
 
-
-
+par(mar = c(8, 8, 8, 8), family = "HersheySans")
+wssplot03(winescale)
 
 
 # Exercise 2:
@@ -77,16 +88,22 @@ wssplot02(winescale)
 #   * Why does this method work? What's the intuition behind it?
 #   * Look at the code for wssplot() and figure out how it works
 
+
+
+
 # Method 2: Use the NbClust library, which runs many experiments
 # and gives a distribution of potential number of clusters.
 
-par(family = "Times")
+
 library(NbClust)
 set.seed(1234)
 nc <- NbClust(winescale, min.nc=2, max.nc=15, method="kmeans")
+
+par(mfrow = c(1, 1), mar = c(4, 4, 4, 4), family = "Times")
 barplot(table(nc$Best.n[1,]),
         xlab="Numer of Clusters", ylab="Number of Criteria",
         main="Number of Clusters Chosen by 26 Criteria")
+
 
 
 # Exercise 3: How many clusters does this method suggest?
@@ -96,7 +113,9 @@ barplot(table(nc$Best.n[1,]),
 # using this number of clusters. Output the result of calling kmeans()
 # into a variable fit.km
 
-# fit.km <- kmeans( ... )
+set.seed(24)
+fit.km <- kmeans(winescale, centers = 3, iter.max = 10, nstart = 3)
+
 
 # Now we want to evaluate how well this clustering does.
 
@@ -104,9 +123,31 @@ barplot(table(nc$Best.n[1,]),
 # compares to the actual wine types in wine$Type. Would you consider this a good
 # clustering?
 
+clustTab <- table(fit.km$cluster, wine$Type)
+clustTab
+
+#      1  2  3
+#   1 59  2  0
+#   2  0 68  0
+#   3  0  1 48
+
+clustDF <- as.data.frame(clustTab)
 
 # Exercise 6:
-# * Visualize these clusters using  function clusplot() from the cluster library
+# * Visualize these clusters using function clusplot() from the cluster library
 # * Would you consider this a good clustering?
 
-#clusplot( ... )
+par(mfrow = c(1, 1), mar = c(8, 8, 8, 8), family = "HersheySans")
+clusplot(winescale, clus = fit.km$cluster)
+
+
+
+# PAM
+
+clusPAM <- pam(winescale, k = 3)
+clusPAMtab <- table(clusPAM$clustering, wine$Type)
+clusPAMtab
+#      1  2  3
+#   1 59 12  0
+#   2  0 58  0
+#   3  0  1 48
