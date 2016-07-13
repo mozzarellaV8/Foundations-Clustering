@@ -129,7 +129,7 @@ sswDF
 
 Just to check my own values against the function's:
 
-![wss plot function](plots/wssplot-deconstruct-02.png)
+![wss plot function](plots/wssplot-decontruct-02.png)
 
 
 
