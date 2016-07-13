@@ -45,7 +45,7 @@ And to see them all:
 ```
 sswDF <- as.data.frame(ssw = ssw, nc = 1:15)
 sswDF
-   	nc       ssw
+   	  nc       ssw
 1	   1 2477.9964
 2	   2 1718.9638
 3	   3 1278.3402
