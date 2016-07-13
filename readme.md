@@ -16,7 +16,7 @@ library(NbClust)
 data(wine, package = "rattle")
 head(wine)
 ```
-![wine data](plots/wine.png)
+![wine data](plots/winedata.png)
 
 First off we'll remove the first column of and then normalizing the data using `scale()`. This method takes the mean and standard deviation of each value and then normalizes each values by substrating the mean and dividing by the standard deviation - I believe essentially creating a z-statistic. 
 
@@ -29,7 +29,9 @@ winescale <- as.data.frame(round(scale(wine), digits = 4))
 
 ###### Method 01
 
-Looking for an elbow: "A plot of the total within-groups sums of squares against the number of clusters in a K-means solution can be helpful. A bend in the graph can suggest the appropriate amount of clusters."
+_Looking for an elbow:_ 
+
+"A plot of the total within-groups sums of squares against the number of clusters in a K-means solution can be helpful. A bend in the graph can suggest the appropriate amount of clusters."
 
 ![wssplot](plots/SSW.png)
 
