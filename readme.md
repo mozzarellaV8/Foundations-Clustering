@@ -105,6 +105,9 @@ This method literally suggests 3 clusters, as shown in the output and barplot:
 
 ![clusplot](plots/clusplot-winescale-01.png)
 
+![delaunay triangulation over clusters](plots/del-01.png)
+
+
 
 
 
