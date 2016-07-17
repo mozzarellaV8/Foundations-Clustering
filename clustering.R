@@ -190,7 +190,7 @@ euclidWinePlot <- fviz_silhouette(euclideanWine) +
 
 euclidWinePlot
 
-# cluplot w/ fviz_cluster -----------------------------------------------------
+# clusplot w/ fviz_cluster -----------------------------------------------------
 
 clusterplot <- fviz_cluster(fit.km, winescale, repel = TRUE) +
   scale_fill_brewer(palette = "YlOrRd", direction = -1) +
@@ -213,7 +213,7 @@ corrplot(winecor, method = "pie", tl.srt = 45)
 
 # order by first principal component
 corrplot(winecor, method = "ellipse", tl.srt = 45, tl.cex = 0.8, order = "FPC",
-         mar = c(8, 8, 8, 8))
+         mar = c(4, 2, 2, 2))
 
 # order by hclust
 corrplot(winecor, method = "ellipse", tl.srt = 45, tl.cex = 0.8, order = "hclust",
