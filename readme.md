@@ -179,11 +179,7 @@ euclidWinePlot
 
 ![silhouette base plot](plots/silhouette01-euclidean.png)
 
+And out of curiosity, I thought I'd check the correlation between individual variables in the scaled wine dataset using `corrplot`. This used the `ellipse` method and ordered the variables by first principal component.
 
-
-
-
-
-
-
+![corrplot-fpc](plots/corrplot03-fpc.png)
 
