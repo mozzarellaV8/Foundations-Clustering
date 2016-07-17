@@ -8,6 +8,7 @@ This exercise is adapted from the book [R in Action](http://www.r-bloggers.com/k
 - [Selecting a Number of Clusters: Method 01](#method-01)
 - [Selecting a Number of Clusters: Method 02](#method-02)
 - [K-Means Clustering](#k-means-clustering)
+- [Evaluation and Visualization](#evaluation-and-visualization)
 
 ## Load and Scale
 
@@ -133,6 +134,7 @@ clustDF <- as.data.frame(clustTab)
 
 ```
 
+## Evaluation and Visualization
 
 #### Exercise 6:
 
