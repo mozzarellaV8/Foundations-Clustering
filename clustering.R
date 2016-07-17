@@ -107,18 +107,20 @@ barplot(table(nc$Best.n[1,]),
 
 
 # Exercise 3: How many clusters does this method suggest?
-
+# 3
 
 # Exercise 4: Once you've picked the number of clusters, run k-means 
 # using this number of clusters. Output the result of calling kmeans()
 # into a variable fit.km
 
+# fit model - kmeans ----------------------------------------------------------
+
 set.seed(24)
 fit.km <- kmeans(winescale, centers = 3, iter.max = 10, nstart = 3)
 
-
 # Now we want to evaluate how well this clustering does.
 
+# evaluate cluster fit - table() ----------------------------------------------
 # Exercise 5: using the table() function, show how the clusters in fit.km$clusters
 # compares to the actual wine types in wine$Type. Would you consider this a good
 # clustering?
@@ -133,6 +135,7 @@ clustTab
 
 clustDF <- as.data.frame(clustTab)
 
+# cluster visualizations ------------------------------------------------------
 # Exercise 6:
 # * Visualize these clusters using function clusplot() from the cluster library
 # * Would you consider this a good clustering?
@@ -147,14 +150,26 @@ wineclust$cluster <- as.factor(fit.km$cluster)
 # create new df with centers of clusters for each variable
 centers <- as.data.frame(fit.km$centers)
 
+# silhouette plot -------------------------------------------------------------
 
-# check and see how the variables are correlated
+# distance matrix computation
+d <- dist(winescale, method = "euclidean")
+
+# silhouette plot of kmeans clusters with euclidean distances
+par(mfrow = c(1, 1), mar = c(4, 4, 4, 4), family = "Arial Rounded MT Bold")
+plot(silhouette(fit.km$cluster, d))
+
+
+
+# corrplot - variables --------------------------------------------------------
+# check and see how the variables are correlated 
 library(corrplot)
 winecor <- cor(winescale)
 par(mfrow = c(2, 2), mar = c(8, 8, 8, 8), family = "Arial Rounded MT Bold")
 corrplot(winecor, method = "circle", tl.srt = 45)
 
 
+# ggplots of specific variables -----------------------------------------------
 
 # Do more strongly-correlated variables fall more cleanly into clusters?
 library(ggplot2)
