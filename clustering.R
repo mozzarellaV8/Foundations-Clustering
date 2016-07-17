@@ -151,23 +151,73 @@ wineclust$cluster <- as.factor(fit.km$cluster)
 centers <- as.data.frame(fit.km$centers)
 
 # silhouette plot -------------------------------------------------------------
+# library(cluster)
 
-# distance matrix computation
+# distance matrix computations
 d <- dist(winescale, method = "euclidean")
+d2 <- dist(winescale, method = "manhattan")
 
 # silhouette plot of kmeans clusters with euclidean distances
 par(mfrow = c(1, 1), mar = c(4, 4, 4, 4), family = "Arial Rounded MT Bold")
-plot(silhouette(fit.km$cluster, d))
+plot(silhouette(fit.km$cluster, d), col = fit.km$cluster)
 
+# sil plot - manhattan dist
+plot(silhouette(fit.km$cluster, d2), col = c("steelblue2", "steelblue3",
+                                             "steelblue4"))
+
+# silhouette plot with fviz_silhouette()
+install.packages("factoextra")
+library(factoextra)
+library(RColorBrewer)
+euclideanWine <- silhouette(fit.km$cluster, d)
+manhattanWine <- silhouette(fit.km$cluster, d2)
+
+summary(euclideanWine)
+# Silhouette of 178 units in 3 clusters
+# Cluster sizes and average silhouette widths:
+#       62        65        51 
+#       0.3434119 0.1774106 0.3506214 
+
+# Individual silhouette widths:
+#       Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#   -0.0228  0.1776  0.3195  0.2849  0.4016  0.4977 
+
+euclidWinePlot <- fviz_silhouette(euclideanWine) + 
+  scale_fill_brewer(palette = "YlOrRd", direction = -1) +
+  scale_color_brewer(palette = "YlOrRd", direction = -1) +
+  theme_minimal(base_size = 12, base_family = "Arial Rounded MT Bold") +
+  theme(axis.text.x = element_blank())
+
+euclidWinePlot
+
+# cluplot w/ fviz_cluster -----------------------------------------------------
+
+clusterplot <- fviz_cluster(fit.km, winescale, repel = TRUE) +
+  scale_fill_brewer(palette = "YlOrRd", direction = -1) +
+  scale_color_brewer(palette = "YlOrRd", direction = -1) +
+  theme_minimal(base_size = 12, base_family = "Arial Rounded MT Bold") +
+  theme(plot.margin = unit(c(2, 2, 2, 2), "cm")) +
+  labs(title = "K-Means - Cluster Plot")
+
+clusterplot
 
 
 # corrplot - variables --------------------------------------------------------
 # check and see how the variables are correlated 
 library(corrplot)
 winecor <- cor(winescale)
-par(mfrow = c(2, 2), mar = c(8, 8, 8, 8), family = "Arial Rounded MT Bold")
+par(mfrow = c(1, 1), mar = c(8, 8, 8, 8), family = "Arial Rounded MT Bold")
 corrplot(winecor, method = "circle", tl.srt = 45)
+corrplot(winecor, method = "shade", tl.srt = 45)
+corrplot(winecor, method = "pie", tl.srt = 45)
 
+# order by first principal component
+corrplot(winecor, method = "ellipse", tl.srt = 45, tl.cex = 0.8, order = "FPC",
+         mar = c(8, 8, 8, 8))
+
+# order by hclust
+corrplot(winecor, method = "ellipse", tl.srt = 45, tl.cex = 0.8, order = "hclust",
+         mar = c(8, 8, 8, 8))
 
 # ggplots of specific variables -----------------------------------------------
 
@@ -193,46 +243,4 @@ wcplot02 <- ggplot(wineclust, aes(x = Alcohol, y = Proline, color = cluster)) +
                color = "red4", alpha = 0.50)
 
 wcplot02
-
-# Voronoi Cells -------------------------------------------
-
-library(deldir)
-vtess <- deldir(winescale$Alcohol, winescale$Proline)
-vtess_tile <- tile.list(vtess)
-
-library(RColorBrewer)
-winepal <- brewer.pal(3, "Reds")
-
-par(mfrow = c(1, 1), mar = c(6, 6, 6, 6), family = "HersheySans")
-plot.tile.list(vtess_tile, type = "triang", asp = 1, axes = F, 
-               fillcol = winepal)
-
-# ggplot w/ delaunay triangulation
-wcplot03 <- ggplot(wineclust, aes(x = Alcohol, y = Proline, color = cluster)) +
-  geom_point(size = 2.75) +
-  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center')) +
-  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center'),
-             size = 24, alpha = 0.25) +
-  theme_minimal(base_size = 12, base_family = "HersheySans") +
-  geom_segment(data = vtess$delsgs, aes(x = x1, y = y1, xend = x2, yend = y2),
-               color = "red4", alpha = 0.35) +
-  labs(title = "Delaunay Triangulation over Alcohol and Proline points")
-
-wcplot03
-
-wcplot04 <- ggplot(wineclust, aes(x = Alcohol, y = Proline, color = cluster)) +
-  geom_point(size = 2.75) +
-  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center')) +
-  geom_point(data = centers, aes(x = Alcohol, y = Proline, color = 'Center'),
-             size = 24, alpha = 0.25) +
-  theme_minimal(base_size = 12, base_family = "HersheySans") +
-  geom_segment(data = vtess$dirsgs, aes(x = x1, y = y1, xend = x2, yend = y2),
-               color = "red4", alpha = 0.35) +
-  labs(title = "Voronoi tessellation over Alcohol and Proline points")
-
-wcplot04
-
-
-
-
 
