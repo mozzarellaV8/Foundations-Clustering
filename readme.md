@@ -138,8 +138,46 @@ clustDF <- as.data.frame(clustTab)
 
 ![clusplot](plots/clusplot-winescale-01.png)
 
-![delaunay triangulation over clusters](plots/del-01.png)
+I thought I'd try one using the `factoextra` library which has plotting arguments of `ggplot2`.
 
+``` r
+library(factoextra)
+library(RColorBrewer)
+
+clusterplot <- fviz_cluster(fit.km, winescale, repel = TRUE) +
+  scale_fill_brewer(palette = "YlOrRd", direction = -1) +
+  scale_color_brewer(palette = "YlOrRd", direction = -1) +
+  theme_minimal(base_size = 12, base_family = "Arial Rounded MT Bold") +
+  theme(plot.margin = unit(c(2, 2, 2, 2), "cm")) +
+  labs(title = "K-Means - Cluster Plot")
+
+clusterplot
+```
+
+![fviz_cluster](plots/cluster-fviz-02.png)
+
+And also try out a silhouette plot to check: 
+
+``` r
+euclideanWine <- silhouette(fit.km$cluster, d)
+summary(euclideanWine)
+# Silhouette of 178 units in 3 clusters
+# Cluster sizes and average silhouette widths:
+#       62        65        51 
+#       0.3434119 0.1774106 0.3506214 
+
+euclidWinePlot <- fviz_silhouette(euclideanWine) + 
+  scale_fill_brewer(palette = "YlOrRd", direction = -1) +
+  scale_color_brewer(palette = "YlOrRd", direction = -1) +
+  theme_minimal(base_size = 12, base_family = "Arial Rounded MT Bold") +
+  theme(axis.text.x = element_blank())
+
+euclidWinePlot
+```
+
+![fviz_silhouette](plots/silhouette04-fviz-euclidean.png)
+
+![silhouette base plot](plots/silhouette01-euclidean.png)
 
 
 
