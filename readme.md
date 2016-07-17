@@ -7,6 +7,7 @@ This exercise is adapted from the book [R in Action](http://www.r-bloggers.com/k
 - [Load and Scale the data](#load-and-scale)
 - [Selecting a Number of Clusters: Method 01](#method-01)
 - [Selecting a Number of Clusters: Method 02](#method-02)
+- [K-Means Clustering](#k-means-clustering)
 
 ## Load and Scale
 
@@ -102,6 +103,8 @@ barplot(table(nc$Best.n[1,]),
 This method literally suggests 3 clusters, as shown in the output and barplot:
 
 ![NbClust barplot](plots/NbClust-01.png)
+
+## K-Means Clustering
 
 #### Exercise 4 - fit K-Means model
 
