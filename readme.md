@@ -103,6 +103,39 @@ This method literally suggests 3 clusters, as shown in the output and barplot:
 
 ![NbClust barplot](plots/NbClust-01.png)
 
+#### Exercise 4 - fit K-Means model
+
+**Once you've picked the number of clusters, run k-means using this number of clusters. Output the result of calling kmeans() into a variable fit.km.**
+
+``` r
+set.seed(24)
+fit.km <- kmeans(winescale, centers = 3, iter.max = 10, nstart = 3)
+```
+
+#### Exercise 5 - evaluate K-Means model
+
+**Using the table() function, show how the clusters in fit.km$clusters compares to the actual wine types in wine$Type. Would you consider this a good clustering?**
+
+``` r
+
+clustTab <- table(fit.km$cluster, wine$Type)
+clustTab
+
+#      1  2  3
+#   1 59  2  0
+#   2  0 68  0
+#   3  0  1 48
+
+clustDF <- as.data.frame(clustTab)
+
+```
+
+
+#### Exercise 6:
+
+**Visualize these clusters using function clusplot() from the cluster library. Would you consider this a good clustering?**
+
+
 ![clusplot](plots/clusplot-winescale-01.png)
 
 ![delaunay triangulation over clusters](plots/del-01.png)
